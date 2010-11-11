@@ -40,3 +40,6 @@ endwhile:
 	pop // remove read character
 	pop // remove fputc objref
 	ireturn
+
+/* vim:syn=bytecode:
+ */
