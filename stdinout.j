@@ -29,6 +29,24 @@ yes:
 	bipush 0
 	ireturn
 
+.method rot13int
+.args 2
+	iload 1
+	bipush 13
+	isub
+	iflt lower
+
+	iload 1
+	bipush 13
+	isub
+	ireturn
+
+lower:
+	iload 1
+	bipush 13
+	iadd
+	ireturn
+
 .method main
 .args 1
 .locals 3
@@ -61,23 +79,15 @@ while:
 	isub
 	iflt post_uppercase
 
+	bipush 42 // objref
 	iload char
-	bipush 13+65
+	bipush 65
 	isub
-	iflt uppercase_lowerregion
-
-uppercase_upperregion:
-	iload char
-	bipush 13
-	isub
-	istore char
-	goto post_uppercase
-
-uppercase_lowerregion:
-	iload char
-	bipush 13
+	invokevirtual rot13int
+	bipush 65
 	iadd
 	istore char
+
 post_uppercase:
 
 	bipush 42 // objref
