@@ -47,6 +47,33 @@ lower:
 	iadd
 	ireturn
 
+.method rot13
+.args 2
+	// check c < 'A'
+	iload 1
+	dup
+	bipush 65 // 'A'
+	isub
+	iflt post_uppercase
+
+	// check 'Z' < c
+	dup
+	bipush 26+65 // letters in alphabet
+	swap
+	isub
+	iflt post_uppercase
+
+	bipush 42 // objref
+	swap
+	bipush 65
+	isub
+	invokevirtual rot13int
+	bipush 65
+	iadd
+
+post_uppercase:
+	ireturn
+
 .method main
 .args 1
 .locals 3
@@ -67,25 +94,9 @@ while:
 	invokevirtual iseof
 	ifeq endwhile
 
-	// check c < 'A'
-	iload char
-	bipush 65 // 'A'
-	isub
-	iflt post_uppercase
-
-	// check 'Z' < c
-	bipush 26+65 // letters in alphabet
-	iload char
-	isub
-	iflt post_uppercase
-
 	bipush 42 // objref
 	iload char
-	bipush 65
-	isub
-	invokevirtual rot13int
-	bipush 65
-	iadd
+	invokevirtual rot13
 	istore char
 
 post_uppercase:
