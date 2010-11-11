@@ -22,14 +22,41 @@ while:
 	invokevirtual fgetc
 
 	dup
-	bipush 1
-	iadd
-	ifeq endwhile // eof
+	bipush -1
+	if_icmpeq endwhile // eof
 
 	dup
 	bipush 4
+	if_icmpeq endwhile // ^D
+
+	dup
+	// check c < 'A'
+	bipush 65 // 'A'
 	isub
-	ifeq endwhile // ^D
+	iflt post_uppercase
+
+	dup
+	// check 'Z' < c
+	bipush 26+65 // letters in alphabet
+	swap
+	isub
+	iflt post_uppercase
+
+	dup
+	bipush 13+65
+	isub
+	dup
+	iflt uppercase_lowerregion
+
+uppercase_upperregion:
+	bipush 65
+	iadd
+	goto post_uppercase
+
+uppercase_lowerregion:
+	bipush 65+26
+	iadd
+post_uppercase:
 
 	invokevirtual fputc
 	pop // disregard return value from fputc
@@ -41,5 +68,4 @@ endwhile:
 	pop // remove fputc objref
 	ireturn
 
-/* vim:syn=bytecode:
- */
+// vim:syn=bytecode:
