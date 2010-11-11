@@ -70,8 +70,33 @@ lower:
 	invokevirtual rot13int
 	bipush 65
 	iadd
+	ireturn
 
 post_uppercase:
+	// check c < 'a'
+	iload 1
+	dup
+	bipush 97 // 'a'
+	isub
+	iflt post_lowercase
+
+	// check 'z' < c
+	dup
+	bipush 26+97 // letters in alphabet
+	swap
+	isub
+	iflt post_lowercase
+
+	bipush 42 // objref
+	swap
+	bipush 97
+	isub
+	invokevirtual rot13int
+	bipush 97
+	iadd
+	ireturn
+
+post_lowercase:
 	ireturn
 
 .method main
